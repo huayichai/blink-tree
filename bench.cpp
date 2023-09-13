@@ -13,7 +13,7 @@ using namespace BLINK_TREE;
 
 /**
  * @brief Generate data in random order within the range of [begin, end)
- * @param datas [output]
+ * @param[out] datas
  */
 template <typename T>
 void generate_data(T* datas, int begin, int end) {

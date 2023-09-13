@@ -49,9 +49,9 @@ class Node {
    * @brief check whether it is locked
    *        if current node is locked by other thread, means current thread
    * should be restart
-   * @param restart [output]
+   * @param[out] restart
    */
-  uint64_t whether_lock(bool& restart) {
+  uint64_t try_readlock(bool& restart) {
     uint64_t version = (uint64_t)lock.load();
     need_restart(version, restart);
     return version;
@@ -103,7 +103,7 @@ class Node {
    * @brief need_restart
    *        if locked or obsoleted, need restart
    * @param version lock value
-   * @param restart [output] true for need restart, false for not need restart
+   * @param[out] restart true for need restart, false for not need restart
    */
   void need_restart(uint64_t version, bool& restart) {
     if (is_locked(version) || is_obsolete(version)) {
@@ -212,7 +212,7 @@ class InternalNode : public Node {
    *   | p1 | p2 | p3 |                              | p4 | p5 |
    *
    *
-   * @param split_key [output]
+   * @param[out] split_key
    * @return new allocated internal node
    */
   InternalNode<key_t>* split(key_t& split_key) {
@@ -311,7 +311,7 @@ class LeafNode : public Node {
    * @brief Split half entries to new node, and rearrange sibling ptr.
    *        original: prev_node -> cur_node -> next_node,
    *             now: prev_node -> cur_node -> new_node -> next_node
-   * @param split_key [output]
+   * @param[out] split_key
    * @return new allocated leaf node
    */
   LeafNode<key_t>* split(key_t& split_key) {
